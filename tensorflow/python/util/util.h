@@ -47,6 +47,15 @@ bool IsSequence(PyObject* o);
 //   True if `instance` is a `namedtuple`.
 PyObject* IsNamedtuple(PyObject* o, bool strict);
 
+// Returns a true if its input is a collections.Mapping.
+//
+// Args:
+//   seq: the input to be checked.
+//
+// Returns:
+//   True if the sequence subclasses mapping.
+bool IsMapping(PyObject* o);
+
 // Implements the same interface as tensorflow.util.nest._same_namedtuples
 // Returns Py_True iff the two namedtuples have the same name and fields.
 // Raises RuntimeError if `o1` or `o2` don't look like namedtuples (don't have
@@ -118,7 +127,9 @@ PyObject* Flatten(PyObject* nested);
 // the type from the module. This approach also requires some trigger from
 // Python so that we know that Python interpreter had been initialzied.
 void RegisterSequenceClass(PyObject* sequence_class);
-// Similar to the above function, except for the
+// Like RegisterSequenceClass, but for collections.Mapping.
+void RegisterMappingClass(PyObject* mapping_class);
+// Similar to the above functions, except for the
 // sparse_tensor.SparseTensorValue class.
 void RegisterSparseTensorValueClass(PyObject* sparse_tensor_value_class);
 

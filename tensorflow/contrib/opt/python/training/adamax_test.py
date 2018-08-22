@@ -172,7 +172,7 @@ class AdaMaxOptimizerTest(test.TestCase):
 
   def doTestBasic(self, use_resource=False):
     for i, dtype in enumerate([dtypes.half, dtypes.float32, dtypes.float64]):
-      with self.test_session(graph=ops.Graph()):
+      with self.session(graph=ops.Graph()):
         # Initialize variables for numpy implementation.
         m0, v0, m1, v1 = 0.0, 0.0, 0.0, 0.0
         var0_np = np.array([1.0, 2.0], dtype=dtype.as_numpy_dtype)
@@ -224,8 +224,10 @@ class AdaMaxOptimizerTest(test.TestCase):
           var1_np, m1, v1 = adamax_update_numpy(var1_np, grads1_np, t, m1, v1)
 
           # Validate updated params
-          self.assertAllCloseAccordingToType(var0_np, self.evaluate(var0))
-          self.assertAllCloseAccordingToType(var1_np, self.evaluate(var1))
+          self.assertAllCloseAccordingToType(var0_np, self.evaluate(var0),
+                                             rtol=1e-2)
+          self.assertAllCloseAccordingToType(var1_np, self.evaluate(var1),
+                                             rtol=1e-2)
           if use_resource:
             self.assertEqual("var0_%d/AdaMax:0" % (i,),
                              opt.get_slot(var=var0, name="m").name)
